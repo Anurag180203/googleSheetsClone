@@ -4,8 +4,6 @@
 
 ## Screenshot:
 
-<b>[Experience it Live](https://main--comforting-biscotti-e87a56.netlify.app)</b>
-
 <img src="./public/screenshot.png" alt="image-app"/>
 
 ## Features:
