@@ -25,6 +25,120 @@ function isCloseBracket(x) {
   return x == ")";
 }
 
+export function evaluateSum(formula, cellId, sheet) {
+  let val = 0;
+  const dependentOn = [];
+  const range = formula.split("SUM(")[1].split(")")[0];
+  const [start, end] = range.split(":");
+  const startRow = start.slice(1);
+  const startCol = start[0].charCodeAt(0)-'A'.charCodeAt(0);
+  const endRow = end.slice(1);
+  const endCol = end[0].charCodeAt(0)-'A'.charCodeAt(0);
+
+  // console.log(startRow, startCol, endRow, endCol);
+  
+  for (let row = startRow; row <= endRow; row++) {
+    for (let col = startCol; col <= endCol; col++) {
+      const character = String.fromCharCode(col+'A'.charCodeAt(0));
+      val += parseInt(sheet[row][character].content);
+      dependentOn.push(`${character}${row}`);
+      if (sheet[row][character].id === cellId) {
+        return [null, dependentOn, "Formula cannot contain the cell where the result is to be stored."];
+      }
+    }
+  }
+  
+  return [val, dependentOn, null];
+}
+
+export function evaluateAverage(formula, cellId, sheet) {
+  const [val, dependentOn, err] = evaluateSum(formula, cellId, sheet);
+  if (err) {
+    return [null, null, err];
+  }
+  return [val/dependentOn.length, dependentOn, null];
+}
+
+export function evaluateMax(formula, cellId, sheet) {
+  let val = -Infinity;
+  const dependentOn = [];
+  const range = formula.split("SUM(")[1].split(")")[0];
+  const [start, end] = range.split(":");
+  const startRow = start.slice(1);
+  const startCol = start[0].charCodeAt(0)-'A'.charCodeAt(0);
+  const endRow = end.slice(1);
+  const endCol = end[0].charCodeAt(0)-'A'.charCodeAt(0);
+
+  // console.log(startRow, startCol, endRow, endCol);
+  
+  for (let row = startRow; row <= endRow; row++) {
+    for (let col = startCol; col <= endCol; col++) {
+      const character = String.fromCharCode(col+'A'.charCodeAt(0));
+      val = Math.max(val, parseInt(sheet[row][character].content));
+      dependentOn.push(`${character}${row}`);
+      if (sheet[row][character].id === cellId) {
+        return [null, dependentOn, "Formula cannot contain the cell where the result is to be stored."];
+      }
+    }
+  }
+  
+  return [val, dependentOn, null];
+}
+
+export function evaluateMin(formula, cellId, sheet) {
+  let val = Infinity;
+  const dependentOn = [];
+  const range = formula.split("SUM(")[1].split(")")[0];
+  const [start, end] = range.split(":");
+  const startRow = start.slice(1);
+  const startCol = start[0].charCodeAt(0)-'A'.charCodeAt(0);
+  const endRow = end.slice(1);
+  const endCol = end[0].charCodeAt(0)-'A'.charCodeAt(0);
+
+  // console.log(startRow, startCol, endRow, endCol);
+  
+  for (let row = startRow; row <= endRow; row++) {
+    for (let col = startCol; col <= endCol; col++) {
+      const character = String.fromCharCode(col+'A'.charCodeAt(0));
+      val = Math.min(val, parseInt(sheet[row][character].content));
+      dependentOn.push(`${character}${row}`);
+      if (sheet[row][character].id === cellId) {
+        return [null, dependentOn, "Formula cannot contain the cell where the result is to be stored."];
+      }
+    }
+  }
+  
+  return [val, dependentOn, null];
+}
+
+export function evaluateCount(formula, cellId, sheet) {
+  let val = 0;
+  const dependentOn = [];
+  const range = formula.split("SUM(")[1].split(")")[0];
+  const [start, end] = range.split(":");
+  const startRow = start.slice(1);
+  const startCol = start[0].charCodeAt(0)-'A'.charCodeAt(0);
+  const endRow = end.slice(1);
+  const endCol = end[0].charCodeAt(0)-'A'.charCodeAt(0);
+
+  // console.log(startRow, startCol, endRow, endCol);
+  
+  for (let row = startRow; row <= endRow; row++) {
+    for (let col = startCol; col <= endCol; col++) {
+      const character = String.fromCharCode(col+'A'.charCodeAt(0));
+      if(sheet[row][character].content && !isNaN(sheet[row][character].content)) {
+        val++;
+      }
+      dependentOn.push(`${character}${row}`);
+      if (sheet[row][character].id === cellId) {
+        return [null, dependentOn, "Formula cannot contain the cell where the result is to be stored."];
+      }
+    }
+  }
+  
+  return [val, dependentOn, null];
+}
+
 export function infixToPostfix(infix) {
   let stack = [];
   let i = 0;

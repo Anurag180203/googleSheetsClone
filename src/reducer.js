@@ -3,12 +3,60 @@ import {
   infixToPostfix,
   evaluatePostFix,
   getCellValuesInPostfix,
+  evaluateSum,
+  evaluateAverage,
+  evaluateMax,
+  evaluateMin,
+  evaluateCount,
 } from "./FormulaActions/infixToPostfix";
 
 function solveFormula(cellId, draft, currentSheet) {
   const cellRow = cellId.slice(1),
     cellCol = cellId[0],
     formula = draft[currentSheet][cellRow][cellCol].formula;
+
+  if (formula.includes("SUM")) {
+    const [val, dependentOn, err] = evaluateSum(formula, cellId, draft[currentSheet]);
+    if (err) {
+      console.log(err);
+      alert(err);
+      return [null, null, null, null, err];
+    }
+    return [null, null, dependentOn, val, null];
+  } else if (formula.includes("AVERAGE")) {
+    console.log("AVERAGE")
+    const [val, dependentOn, err] = evaluateAverage(formula, cellId, draft[currentSheet]);
+    if (err) {
+      console.log(err);
+      alert(err);
+      return [null, null, null, null, err];
+    }
+    return [null, null, dependentOn, val, null];
+  } else if (formula.includes("MAX")) {
+    const [val, dependentOn, err] = evaluateMax(formula, cellId, draft[currentSheet]);
+    if (err) {
+      console.log(err);
+      alert(err);
+      return [null, null, null, null, err];
+    }
+    return [null, null, dependentOn, val, null];
+  } else if (formula.includes("MIN")) {
+    const [val, dependentOn, err] = evaluateMin(formula, cellId, draft[currentSheet]);
+    if (err) {
+      console.log(err);
+      alert(err);
+      return [null, null, null, null, err];
+    }
+    return [null, null, dependentOn, val, null];
+  } else if (formula.includes("COUNT")) {
+    const [val, dependentOn, err] = evaluateCount(formula, cellId, draft[currentSheet]);
+    if (err) {
+      console.log(err);
+      alert(err);
+      return [null, null, null, null, err];
+    }
+    return [null, null, dependentOn, val, null];
+  }
 
   const [formulaArrayPostfix, err] = infixToPostfix(formula);
 
