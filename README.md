@@ -18,22 +18,17 @@
    6. Font Size.
    7. Color.
    8. Background Color.
+   9. Uppercase
+   10. Lowercase
+   11. Trim
 3. Creating and Editing multiple sheets.
 4. Formula Evaluation.
    1. Dependent cell value change causes other cell which are dependent on this to update as well.
    2. Changing the cell contents of a cell directly removes the formula from the content cell directly.
    3. Formula Evaluation does not support unary operators. eg to do 10 _ (-20) write the formula as 10 _ (0 - 20) {unary '-' is not supported}
+   4. Math functions supported -- SUM, AVERAGE, COUNT, MAX, MIN with range of cells like A1:B2 will have A1, A2, B1, B2
 5. Conversion of sheets to json and reading from json.
 6. Copying and Pasting of a Single Cell (including formula and styles if any)
-
-#### Maybe in Future (Raise PR if you want to do it.):
-
-1. Multi-cell copy paste.
-2. Export/Import CSVs.
-3. App currently passes down state and dispaatch function as props modify so that it uses context
-4. App currently has two different kind of states, merge into one.
-5. Remove hacky ways to show alert.
-6. Maybe possible to optimize rerendering using useCallback, useMemo, React.memo. (I am not sure how.)
 
 #### Some Insights:
 
