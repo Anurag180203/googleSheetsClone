@@ -1,6 +1,7 @@
 import {
   AddDependentCell,
   ChangeActiveCellProperties,
+  ChangeActiveCellValue,
   CopyCell,
   CutCell,
   DownloadAction,
@@ -161,6 +162,33 @@ export default function CellActions({
     };
   };
 
+  const handleTextTransform = (transform) => {
+    if (!activeCell || !activeCell.id) return;
+    
+    let newValue = activeCell.content;
+    switch (transform) {
+      case 'uppercase':
+        newValue = String(newValue).toUpperCase();
+        break;
+      case 'lowercase':
+        newValue = String(newValue).toLowerCase();
+        break;
+      case 'trim':
+        newValue = String(newValue).trim();
+        break;
+      default:
+        return;
+    }
+    
+    dispatch(
+      ChangeActiveCellValue(
+        activeCell.id,
+        currentSheet,
+        newValue
+      )
+    );
+  };
+
   return (
     <div className="cell-actions-container">
       <ContentCopy
@@ -279,6 +307,17 @@ export default function CellActions({
       <div className="cell-actions">
         <CloudDownload onClick={() => handleDownload()} />
       </div>
+      <select
+        className="cell-actions font-dropdown"
+        onChange={(e) => handleTextTransform(e.target.value)}
+        disabled={!activeCell || !activeCell.id}
+        defaultValue=""
+      >
+        <option value="" disabled>Data Quality</option>
+        <option value="uppercase">UPPERCASE</option>
+        <option value="lowercase">lowercase</option>
+        <option value="trim">Trim Whitespace</option>
+      </select>
     </div>
   );
 }

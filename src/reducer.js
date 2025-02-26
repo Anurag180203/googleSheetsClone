@@ -171,6 +171,9 @@ export default function reducer(draft, action) {
     case "CHANGE_ACTIVE_CELL":
       draft[action.currentSheet]["activeCell"] = action.cellId;
       break;
+    case "CHANGE_ACTIVE_CELL_VALUE":
+      draft[action.currentSheet][action.cellId.slice(1)][action.cellId[0]].content = action.value;
+      break;
     case "CHANGE_ACTIVE_CELL_PROPERTIES":
       draft[action.currentSheet][action.cellId.slice(1)][action.cellId[0]][
         action.property
@@ -306,6 +309,15 @@ export const CreateSheetAction = () => {
 
 export const ChangeActiveCell = (cellId, currentSheet) => {
   return { type: "CHANGE_ACTIVE_CELL", cellId, currentSheet };
+};
+
+export const ChangeActiveCellValue = (cellId, currentSheet, value) => {
+  return {
+    type: "CHANGE_ACTIVE_CELL_VALUE",
+    cellId,
+    currentSheet,
+    value,
+  };
 };
 
 export const ChangeActiveCellProperties = (
